@@ -532,7 +532,7 @@ class Drillo extends Base {
                     if (pow.time >= pow.timer) this.cancelPower(i)
                 }
                 if (pow.type == 'super pound' && !this.climb) {
-                    const strength = 3
+                    const strength = 7
 
                     if (pow.drop == 'done') {
                         // Screen Colours
