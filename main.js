@@ -23,6 +23,10 @@ function talk(type, one_off = false) {
 
         return
     }
+    if (type == 'door control') {
+        comment.chat('hero', ['Press the down key to open the door'])
+        return
+    }
     if (type == 'point') {
         comment.chat('hero', [
             'That was a Coin Location upgrade!',

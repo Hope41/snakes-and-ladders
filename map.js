@@ -393,9 +393,8 @@ class Map {
 
                 // FRIENDS
                 if (i == 1) {
-                    if (game.level == 1) {
+                    if (game.level == 1)
                         chatBox(pos.x - 1, pos.y, 1, 1, 'effect')
-                    }
                     else if (game.level == game.friend_level) {
                         makeFriend(pos.x - 1, pos.y)
                         this.actors.push([pos.x - 1, pos.y, 'friend'])
@@ -456,6 +455,7 @@ class Map {
                     const door_y = pos.y + start[2] - 1
                     game.door = new Door(door_x, door_y)
                     this.actors.push([door_x, door_y, 'door'])
+                    chatBox(door_x, door_y, 1, 1, 'door control')
                 }
             }
         }
