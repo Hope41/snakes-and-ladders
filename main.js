@@ -62,7 +62,7 @@ function talk(type, one_off = false) {
     if (type == 'super pound') {
         comment.chat('hero', [
             'That was a Super Pound power up!',
-            'Your next ground pound will remove a life from each enemy.'
+            'Your next ground pound will remove seven lives from every enemy.'
         ])
         return
     }
