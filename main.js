@@ -8,9 +8,8 @@ function talk(type, one_off = false) {
         comment.chat('hero', [
         'Hello. My name is Drillo.',
         'I am on a mission to destroy the X-Ray Orb.',
-        'Can you help me?'])
-        
-        comment.chat('computer', ['Use the arrow keys to move'])
+        'Can you help me?',
+        'Use the arrow keys to move.'])
 
         return
     }
@@ -416,10 +415,24 @@ function calcScale() {
 }
 
 function resize() {
-    cvs.width = innerWidth * devicePixelRatio
-    cvs.height = (innerHeight + 1) * devicePixelRatio
+    cvs.width = innerWidth * dpr
+    cvs.height = (innerHeight + 1) * dpr
 
     game.resize()
+
+    const quart = cvs.width / 4
+    arrow.width = quart
+    arrow.height = cvs.height
+    const y = cvs.height - arrow.height
+
+    left.x = 0
+    left.y = y
+    up.x = quart
+    up.y = y
+    down.x = quart * 2
+    down.y = y
+    right.x = quart * 3
+    right.y = y
 }
 
 function startGame() {
@@ -446,11 +459,17 @@ function startGame() {
     write('SNAKES AND LADDERS', .08, .45)
     write('A Platform Game By Joachim Ford', .04, .49)
 
+    const control = MOBILE ?
+        'Use The Arrow Buttons To Opperate The Game' :
+        'Use The Arrow Keys To Opperate The Game'
     ctx.fillStyle = rgb(0,0,0,ALPHA)
-    write('Use The Arrow Keys To Opperate The Game', .034, .6, '')
+    write(control, .034, .6, '')
 
+    const begin = MOBILE ?
+        'Click Anywhere To Start' :
+        'Press An Arrow Key To Start'
     ctx.fillStyle = rgb(0,0,150+Math.sin(start.time/10)*300,ALPHA)
-    write('Press Down To Start', .04, .7)
+    write(begin, .04, .7)
 
     const fake = fakePos(cvs.width / 2, Y + SIZE * .2)
     hero.x = fake.x - hero.width / 2
@@ -462,7 +481,7 @@ function startGame() {
     ctx.fillStyle = '#000'
     fillRect(_fake.x, hero.y + hero.height, fake.x * 2 - _fake.x * 2, .03)
 
-    if (!key.down) requestAnimationFrame(startGame)
+    if (!key.down && !key.up && !key.left && !key.right) requestAnimationFrame(startGame)
     else {
         hero.speed_x = 0
         hero.walk = 0
@@ -477,6 +496,45 @@ function update() {
     ctx.fillRect(0, 0, cvs.width, cvs.height)
 
     game.update()
+
+    if (MOBILE) {
+        const point = (x, type, angle, flash = 0) => {
+            const size = cvs.height < cvs.width ? (cvs.width + cvs.height) / 20 : cvs.width / 10
+            const y_lift = size / 10
+
+            const draw = y_offset => {
+                ctx.save()
+                ctx.translate(x + arrow.width / 2, cvs.height - size / 2 + y_offset - y_lift)
+                ctx.rotate(angle * Math.PI / 180)
+    
+                ctx.beginPath()
+                ctx.moveTo(-size / 2, 0)
+                ctx.lineTo(size / 2, -size / 2)
+                ctx.lineTo(size / 2, size / 2)
+                ctx.fill()
+    
+                ctx.restore()
+            }
+
+            const sine = 50 + Math.sin(time / 10) * 50
+            const COLOR = comment.active && flash ?
+                rgb(153 - sine, 153 + sine, 153 - sine) :
+                '#999'
+
+            ctx.fillStyle = type ? COLOR : '#555'
+            draw(0)
+
+            if (!type) {
+                ctx.fillStyle = COLOR
+                draw(-scale / 10)
+            }
+        }
+
+        point(left.x, key.left, 0)
+        point(up.x, key.up, 90)
+        point(down.x, key.down, 270, true)
+        point(right.x, key.right, 180, true)
+    }
 
     if (!game.exit) requestAnimationFrame(update)
 }
@@ -515,6 +573,47 @@ function endGame() {
     requestAnimationFrame(endGame)
 }
 
+function device() {
+    const tap = (e, value) => {
+        e.preventDefault()
+
+        const touch = (mouse, obj, type) => {
+            const point = {x: mouse.clientX * dpr, y: mouse.clientY * dpr, width: 0, height: 0}
+            const box = {x: obj.x, y: obj.y, width: arrow.width, height: arrow.height}
+            if (collide(point, box)) key[type] = value
+        }
+
+        for (let i = 0; i < e.changedTouches.length; i ++) {
+            const mouse = e.changedTouches[i]
+            // detect collision with the mouse and the boxes
+            touch(mouse, left, 'left')
+            touch(mouse, up, 'up')
+            touch(mouse, down, 'down')
+            touch(mouse, right, 'right')
+        }
+    }
+    const press = (e, value) => {
+        if (e.repeat) return
+    
+        if (e.key == 'ArrowUp') key.up = value
+        if (e.key == 'ArrowDown') key.down = value
+        if (e.key == 'ArrowLeft') key.left = value
+        if (e.key == 'ArrowRight') key.right = value
+        if (e.key == 'w') key.up = value
+        if (e.key == 's') key.down = value
+        if (e.key == 'a') key.left = value
+        if (e.key == 'd') key.right = value
+        if (e.key == 'z') key.up = value
+        if (e.key == 'q') key.left = value
+    }
+    onkeydown = e => press(e, 1)
+    onkeyup = e => press(e, 0)
+    if (MOBILE) {
+        ontouchstart = e => tap(e, 1)
+        ontouchend = e => tap(e, 0)
+    }
+}
+
 const key = {
     up: false,
     down: false,
@@ -542,6 +641,7 @@ let scale = 0
 let time = 0
 const end = {alpha: 0}
 const start = {time: 0, box: 0}
+const dpr = devicePixelRatio
 
 talk('hello')
 
@@ -552,26 +652,13 @@ const power_up_range = {min: 2, max: 4}
 let power_up_time = random(power_up_range.min, power_up_range.max)
 let power_up_arr = []
 
-function press(e, value) {
-    if (e.repeat) return
-
-    if (e.key == 'ArrowUp') key.up = value
-    if (e.key == 'ArrowDown') key.down = value
-    if (e.key == 'ArrowLeft') key.left = value
-    if (e.key == 'ArrowRight') key.right = value
-    if (e.key == 'w') key.up = value
-    if (e.key == 's') key.down = value
-    if (e.key == 'a') key.left = value
-    if (e.key == 'd') key.right = value
-    if (e.key == 'z') key.up = value
-    if (e.key == 'q') key.left = value
-}
-addEventListener('keydown', e => {
-    press(e, true)
-})
-addEventListener('keyup', e => {
-    press(e, false)
-})
+const MOBILE = 'ontouchstart' in window
+const arrow = {width: 0, height: 0}
+const left = {x: 0, y: 0}
+const up = {x: 0, y: 0}
+const down = {x: 0, y: 0}
+const right = {x: 0, y: 0}
+device()
 
 document.body.appendChild(cvs)
 addEventListener('resize', resize)

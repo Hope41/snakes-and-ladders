@@ -80,7 +80,6 @@ class Talk {
             offset_x = hero.width / 2
             bg_color = [238,221,170]
         }
-        else if (speaker == 'computer') bg_color = [221,238,221]
         else if (speaker == 'friend') {
             offset_x = game.friend.width / 2
             bg_color = [220,200,100]
@@ -131,18 +130,8 @@ class Talk {
     }
 
     draw() {
-        let speaker_x = 0
-        let speaker_y = 0
-
-        if (this.speaker == 'computer') {
-            const pos = fakePos(cvs.width / 2, cvs.height)
-            speaker_x = pos.x
-            speaker_y = pos.y
-        }
-        else {
-            speaker_x = cam.goal.type.x
-            speaker_y = cam.goal.type.y
-        }
+        const speaker_x = cam.goal.type.x
+        const speaker_y = cam.goal.type.y
 
         const pad = .1
         const line_pad = .2
