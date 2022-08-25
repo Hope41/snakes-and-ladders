@@ -427,12 +427,12 @@ function resize() {
 
     left.x = 0
     left.y = y
-    up.x = quart
-    up.y = y
-    down.x = quart * 2
-    down.y = y
-    right.x = quart * 3
+    right.x = quart
     right.y = y
+    up.x = quart * 2
+    up.y = y
+    down.x = quart * 3
+    down.y = y
 }
 
 function startGame() {
