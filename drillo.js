@@ -501,7 +501,7 @@ class Drillo extends Base {
 
         // DOOR COLLISION
         if (!game.door.do_open && collide(this, game.door) && key.down) {
-            if (game.points_collected + game.upgrades_collected == game.points_max + game.upgrades_max)
+            if (game.points_collected + game.upgrades_collected >= game.points_max + game.upgrades_max)
                 this.exit(game.door)
             else {
                 talk('door')

@@ -62,6 +62,8 @@ function setLevelEffects() {
 }
 
 function makeSideEffect(x, y, type, speed_x = 0, speed_y = 0, dir = 0) {
+    if (effectCoin(type)) game.points_max += EFFECT_COIN_COUNT
+
     if (type == 0) game.effects.push(new Stick(x, y, type))
     if (type == 1) game.effects.push(new Centipede(x, y, type))
     if (type == 2) game.effects.push(new Creeper(x, y, type))

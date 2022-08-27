@@ -419,7 +419,6 @@ class Map {
                         else effect_x --
                     }
 
-                    if (effectCoin(type)) game.points_max += EFFECT_COIN_COUNT
                     makeSideEffect(effect_x, effect_y, type)
                     this.actors.push([effect_x, effect_y, 'effect', type])
 
