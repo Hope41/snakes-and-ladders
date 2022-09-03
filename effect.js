@@ -31,6 +31,7 @@ function getLevelEffects() {
     if (game.level <= 9) return [6, 4, 1]
     if (game.level <= 10) return [7, 6, 2]
     if (game.level <= 11) return [7, 6, 4]
+    return [0]
 }
 
 function shuffleEffects() {
