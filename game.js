@@ -110,7 +110,7 @@ class Game {
 
     reloadLevel() {
         hero.set()
-        if (this.hero.health < 5) this.hero.health += 5
+        if (this.hero.health < 5) this.hero.health = 5
         hero.health = this.hero.health
 
         this.set()
