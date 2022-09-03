@@ -1,6 +1,7 @@
 # Snakes And Ladders
 
-> On a mission to destroy the X-Ray Orb, help Drillo make his way through the levels, avoiding side effects and getting powers along the way.
+> On a mission to destroy the X-Ray Orb, help Drillo make his way through\
+> the levels, avoiding side effects and getting powers along the way.
 
 ![](https://github.com/Hope41/snakes-and-ladders/blob/main/image.png?raw=true)
 
