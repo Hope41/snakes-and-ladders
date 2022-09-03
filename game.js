@@ -18,7 +18,7 @@ class Game {
         this.set()
 
         this.level = 1
-        this.end_level = 12
+        this.end_level = 2 // 12
         this.friend_level = 8
         this.end_timer = 0
         this.circle = 1

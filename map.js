@@ -519,7 +519,6 @@ class Map {
             0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,b,b,b,b,b,b,b,b,b,b,b,b,b,b,b,b,b,b,b,b,b,b,b,b,b,b,b,b,b,b,b,b,b,b,b,b,b,b,b
         ]
     
-        game.points_max += EFFECT_COIN_COUNT
         makeSideEffect(effect_x, effect_y, 7)
 
         game.orb = new Orb(orb_x, orb_y)
