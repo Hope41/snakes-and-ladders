@@ -410,12 +410,13 @@ class Map {
                 if (start[1] != 1 && start[2] != 1) {
                     // EFFECTS
                     const type = nextSideEffect()
+                    const type_width = Math.ceil(EFFECT_TYPES[type].width.max)
     
-                    let effect_x = pos.x + random(0, start[1] - EFFECT_TYPES[type].width.max)
+                    let effect_x = pos.x + random(0, start[1] - type_width)
                     const effect_y = pos.y + start[2]
 
-                    if (this.array[effect_x + (effect_y + 1) * width] == AIR) {
-                        if (effect_x < pos.x + start[1] - 1) effect_x ++
+                    if (type_width == 1 && this.array[effect_x + (effect_y + 1) * width] == AIR) {
+                        if (effect_x < pos.x + start[1] - type_width - 1) effect_x ++
                         else effect_x --
                     }
 

@@ -96,7 +96,6 @@ class Effect extends Base {
         this.dir = random(0, 2) ? 1 : -1
 
         this.do_hit = 0
-        this.side = false
 
         this._width = 1
         this._height = 1
@@ -179,26 +178,29 @@ class Effect extends Base {
         const array = []
         const arr = []
 
-        const box = {
-            x: Math.floor(this.x),
-            y: Math.floor(this.y),
-            width: Math.ceil(this.width),
-            height: Math.ceil(this.height)
-        }
+        const box = {}
+        box.x = Math.floor(this.x),
+        box.y = Math.floor(this.y),
+        box.width = Math.floor(this.x + this.width) - box.x,
+        box.height = Math.floor(this.y + this.height) - box.y
+
         const index = posToIndex(box.x, box.y, map.width)
 
-        for (let i = 1; i < box.width; i ++) {
+        for (let i = 0; i < box.width + 1; i ++) {
             array.push(index + i)
             array.push(index + (map.width * box.height) + i)
         }
-        for (let i = 0; i < box.height + 1; i ++) {
+        for (let i = 1; i < box.height; i ++) {
             array.push(index + (i * map.width))
-            array.push(index + box.width + (map.width * i))
+            array.push(index + box.width + (i * map.width))
         }
 
         // turn our indices into objects
         for (let i = 0; i < array.length; i ++) {
             const I = array[i]
+
+            // ctx.fillStyle = '#0f05'
+            // fillRect(I % map.width, Math.floor(I / map.width), 1, 1)
 
             arr.push({
                 x: I % map.width,
@@ -214,8 +216,6 @@ class Effect extends Base {
             if (obj.x >= 0 && obj.x < map.width &&
                 obj.y >= 0 && obj.y < map.height) {
 
-                this.side = false
-
                 if (collide(this, obj)) {
                     if (inItem(map.array[obj.x + obj.y * map.width], 0) == BLOCK) {
                         const overlap = merge(this, obj, this.gravity, 0, this.in_air ? this.speed_x : 0)
@@ -225,7 +225,6 @@ class Effect extends Base {
                             this.speed_x = 0
 
                             this.dir = overlap.x > 0 ? -1 : 1
-                            this.side = true
                         }
                         else {
                             this.y -= overlap.y
@@ -513,6 +512,7 @@ class Creeper extends Effect {
         this.eye_rot = random(0, Math.PI * 2, 0)
         this.alpha = 1
         this.segments = []
+        
         this.generate()
     }
 
@@ -1271,7 +1271,7 @@ class Monster extends Effect {
 
         fillRect(data.x, data.y - pad, (HEAD_WIDTH * .35 + pad) * FLIP, JAW_HEIGHT + pad)
 
-        if (!this.do_kill) {
+        if (!this.do_kill && !comment.active) {
             this.smoke --
 
             if (this.smoke < 0) {
