@@ -2,7 +2,6 @@
 class Talk {
     constructor() {
         this.active = false
-        this.index = 0
         this.queue = []
 
         // chat box data
@@ -38,22 +37,19 @@ class Talk {
         }
     }
 
-    setCurrentChat() {
-        for (let i in key) key[i] = false
+    continueChat() {
+        key.up = false
+        key.down = false
+        key.left = false
+        key.right = false
 
-        if (this.index < 0) {
-            this.index = 0
-            return
-        }
-        if (this.index >= this.queue.length) {
+        if (!this.queue.length) {
             cam.goal = {...cam.default}
             this.active = false
-            this.queue = []
-            this.index = 0
             return
         }
         
-        const dic = this.queue[this.index]
+        const dic = this.queue[0]
         this.offset_x = dic.offset_x
         this.offset_y = dic.offset_y
         this.speech = dic.speech
@@ -61,6 +57,8 @@ class Talk {
         this.color = dic.color
         this.bg_color = dic.bg_color
         cam.goal = {...dic.set_cam}
+
+        this.queue.splice(0, 1)
 
         this.setChatBox()
     }
@@ -103,7 +101,7 @@ class Talk {
             this.queue.push({speaker, speech: speech[i], offset_x, offset_y, color, bg_color, set_cam})
 
         if (!this.active) {
-            this.setCurrentChat()
+            this.continueChat()
             this.active = true
         }
     }
@@ -112,18 +110,10 @@ class Talk {
         this.color[3] += .025
 
         if (this.color[3] >= .9) {
-            if (key.up || key.left) {
+            if (key.up || key.left || key.down || key.right) {
                 this.color[3] = 0
-                this.index --
-                this.setCurrentChat()
+                this.continueChat()
             }
-            if (key.down || key.right) {
-                this.color[3] = 0
-                this.index ++
-                this.setCurrentChat()
-            }
-
-            this.setChatBox()
         }
 
         this.draw()

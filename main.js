@@ -498,7 +498,7 @@ function update() {
     game.update()
 
     if (MOBILE) {
-        const point = (x, type, angle, flash = 0) => {
+        const point = (x, type, angle) => {
             const size = cvs.height < cvs.width ? (cvs.width + cvs.height) / 20 : cvs.width / 10
             const y_lift = size / 10
 
@@ -517,9 +517,7 @@ function update() {
             }
 
             const sine = 50 + Math.sin(time / 10) * 50
-            const COLOR = comment.active && flash ?
-                rgb(153 - sine, 153 + sine, 153 - sine) :
-                '#999'
+            const COLOR = comment.active ? rgb(153 - sine, 153 + sine, 153 - sine) : '#999'
 
             ctx.fillStyle = type ? COLOR : '#555'
             draw(0)
@@ -532,8 +530,8 @@ function update() {
 
         point(left.x, key.left, 0)
         point(up.x, key.up, 90)
-        point(down.x, key.down, 270, true)
-        point(right.x, key.right, 180, true)
+        point(down.x, key.down, 270)
+        point(right.x, key.right, 180)
     }
 
     if (!game.exit) requestAnimationFrame(update)
