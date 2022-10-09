@@ -495,7 +495,6 @@ function update() {
     ctx.fillStyle = rgb(screen.bg[0], screen.bg[1], screen.bg[2], screen.bg[3])
     ctx.fillRect(0, 0, cvs.width, cvs.height)
     frames ++
-    console.log(frames)
 
     game.update()
 
