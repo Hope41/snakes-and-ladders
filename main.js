@@ -494,6 +494,8 @@ function update() {
     ctx.clearRect(0, 0, cvs.width, cvs.height)
     ctx.fillStyle = rgb(screen.bg[0], screen.bg[1], screen.bg[2], screen.bg[3])
     ctx.fillRect(0, 0, cvs.width, cvs.height)
+    frames ++
+    console.log(frames)
 
     game.update()
 
@@ -516,14 +518,11 @@ function update() {
                 ctx.restore()
             }
 
-            const sine = 50 + Math.sin(time / 10) * 50
-            const COLOR = comment.active ? rgb(153 - sine, 153 + sine, 153 - sine) : '#999'
-
-            ctx.fillStyle = type ? COLOR : '#555'
+            ctx.fillStyle = type ? '#999' : '#555'
             draw(0)
 
             if (!type) {
-                ctx.fillStyle = COLOR
+                ctx.fillStyle = '#999'
                 draw(-scale / 10)
             }
         }
@@ -546,14 +545,21 @@ function endGame() {
     ctx.fillStyle = '#fff'
     ctx.fillRect(0, 0, cvs.width, cvs.height)
 
-    const write = (text, size, y) => {
-        ctx.font = 'bold italic ' + size + 'px sans-serif'
+    const write = (text, size, y, style = 'bold italic ') => {
+        ctx.font = style + size + 'px sans-serif'
         ctx.fillText(text, cvs.width / 2 - ctx.measureText(text).width / 2, y)
     }
 
     ctx.fillStyle = rgb(153,0,0,end.alpha)
     write('SNAKES AND LADDERS', scale / 1.5, cvs.height / 2)
-    write('A Game By Joachim Ford', scale / 3, cvs.height / 2 + scale / 3)
+    ctx.fillStyle = rgb(50,0,0,end.alpha)
+    write('Thanks For Playing!', scale / 2.5, cvs.height / 2 + scale / 2)
+
+    const total_secs = Math.floor(frames / 60)
+    const secs = total_secs % 60
+    const mins = (total_secs - secs) / 60
+
+    write('You took ' + mins + ' minutes and ' + secs + ' seconds', scale / 2.5, cvs.height / 2 + scale * 1.2, '')
 
     const fake = fakePos(cvs.width / 2, cvs.height / 2 - scale * 2)
     hero.x = fake.x - hero.width / 2
@@ -637,6 +643,7 @@ const screen = new Screen()
 const comment = new Talk()
 let scale = 0
 let time = 0
+let frames = 0
 const end = {alpha: 0}
 const start = {time: 0, box: 0}
 const dpr = devicePixelRatio
