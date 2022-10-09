@@ -558,7 +558,10 @@ function endGame() {
     const secs = total_secs % 60
     const mins = (total_secs - secs) / 60
 
-    write('You took ' + mins + ' minutes and ' + secs + ' seconds', scale / 2.5, cvs.height / 2 + scale * 1.2, '')
+    const seconds = secs == 1 ? ' second' : ' seconds'
+    const minutes = mins == 1 ? ' minute' : ' minutes'
+
+    write('You took ' + mins + minutes + ' and ' + secs + seconds, scale / 2.5, cvs.height / 2 + scale * 1.2, '')
 
     const fake = fakePos(cvs.width / 2, cvs.height / 2 - scale * 2)
     hero.x = fake.x - hero.width / 2
