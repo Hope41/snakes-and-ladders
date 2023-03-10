@@ -4,4 +4,4 @@
 
 ![](https://github.com/Hope41/snakes-and-ladders/blob/main/image.png?raw=true)
 
-An HTML5 platform game. You can play it [here](https://joachimford.uk/content/snakes_and_ladders.html).
+A JavaScript platform game. You can play it [here](https://joachimford.uk/content/snakes_and_ladders.html).
