@@ -635,7 +635,6 @@ const key = {
     q: false
 }
 
-const cvs = document.createElement('canvas')
 const ctx = cvs.getContext('2d')
 const hero = new Drillo()
 const map = new Map()
@@ -667,7 +666,6 @@ const down = {x: 0, y: 0}
 const right = {x: 0, y: 0}
 device()
 
-document.body.appendChild(cvs)
 addEventListener('resize', resize)
 resize()
 startGame()
