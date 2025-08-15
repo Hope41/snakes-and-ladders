@@ -737,7 +737,7 @@ class Drillo extends Base {
         this.speed_x += this.dir / this.damping
         this.walk += this.speed_x * 2
 
-        // griavity
+        // gravity
         if (!this.climb) this.speed_y += this.gravity
         else {
             if (this.pound.state) this.upgrade_past[this.pound.i].drop = false 

@@ -74,9 +74,9 @@ class Map {
         const size_y = _cvs.height / v_blocks
 
         // concrete
-        const visibilaty = .2
+        const visibility = .2
         const main = 10
-        const base = main + 120 * (1 + visibilaty - screen.bg[3])
+        const base = main + 120 * (1 + visibility - screen.bg[3])
         const transparency = .8
         const alpha_bleed = .2
         const color_bleed = .2
